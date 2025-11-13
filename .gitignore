@@ -1,4 +1,7 @@
 __pycache__/
 .venv/
-outputs/
+*.png
+*.pdf
+*.csv
+
 *.pyc

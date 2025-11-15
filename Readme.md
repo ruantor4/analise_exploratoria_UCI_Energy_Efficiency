@@ -2,108 +2,109 @@
 
 Aplicação desenvolvida em **Python** para realizar **análise exploratória de dados (EDA)**  como parte da **Prova de Conceito (PoC)** de um sistema preditivo para **eficiência energética de edifícios**, com base no conjunto de dados público **[UCI Energy Efficiency Dataset](https://archive.ics.uci.edu/ml/datasets/energy+efficiency)**.
 
-O objetivo deste projeto é **analisar e compreender os dados**, verificando distribuições, correlações e padrões relevantes que auxiliem na criação de modelos preditivos.
+Baseia-se no conjunto de dados público **UCI Energy Efficiency Dataset**, realizando uma análise exploratória completa (EDA) para entender padrões, distribuições e relações entre variáveis, preparando o terreno para modelos de Machine Learning.
 
----
-## 📋 Objetivos do Projeto
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+## Objetivos do Projeto
 
-- Ler e converter dados originais no formato **Excel (.xlsx)** para **CSV (.csv)**.  
-- Explorar o conjunto de dados com **estatísticas descritivas** e **análise de correlação**.  
-- Visualizar padrões e relações entre variáveis usando **gráficos e heatmaps**.  
-- Documentar automaticamente os resultados em um **relatório PDF**.  
+- Converter o arquivo original em Excel (`ENB2012_data.xlsx`) para CSV (`dados.csv`).
+- Explorar estatisticamente o dataset: médias, desvios, quartis, amplitude etc.
+- Verificar valores ausentes.
+- Calcular correlações e extrair as variáveis mais relacionadas.
+- Gerar visualizações como histogramas, boxplots, scatterplots e heatmaps.
+- Compilar automaticamente um **relatório completo em PDF** com todos os resultados.
 
----
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
-## ⚙️ Funcionalidades
+
+## Funcionalidades
 
 | Categoria | Descrição |
-|------------|------------|
-| **Conversão de Arquivos** | Lê o arquivo `ENB2012_data.xlsx` e converte para `dados.csv` automaticamente. |
-| **Leitura de Dados** | Utiliza o `pandas` para importar e validar o CSV convertido. |
-| **Estatísticas Descritivas** | Gera medidas como média, mediana, desvio padrão, mínimo e máximo para cada atributo. |
-| **Detecção de Valores Ausentes** | Verifica e contabiliza dados faltantes ou inconsistentes. |
-| **Análise de Correlação** | Calcula e exibe a matriz de correlação entre variáveis numéricas. |
-| **Extração das Maiores Correlações** | Identifica os pares de atributos mais relacionados usando a função `extrair_maiores_correlacoes()`. |
-| **Visualizações Gráficas** | Cria histogramas e mapas de calor (`heatmaps`) com `matplotlib` e `seaborn`. |
-| **Geração de Relatório PDF** | Compila resultados e gráficos em `outputs/relatorio_analise.pdf`. |
-| **Criação Automática de Pastas** | Estrutura as saídas em diretórios organizados (`data/`, `outputs/`, `outputs/figs/`). |
+|----------|-----------|
+| **Conversão de Arquivos** | Transforma o `ENB2012_data.xlsx` em `dados.csv` automaticamente. |
+| **Leitura e Validação dos Dados** | Importa o CSV e valida estrutura e consistência. |
+| **Estatísticas Descritivas** | Gera métricas estatísticas para todas as variáveis numéricas. |
+| **Detecção de Valores Ausentes** | Conta e exibe atributos com dados faltantes. |
+| **Análise de Correlação** | Calcula matriz de correlação entre variáveis. |
+| **Maiores Correlações** | Identifica os pares mais correlacionados. |
+| **Visualizações** | Histogramas, boxplots, heatmaps e scatterplots. |
+| **Relatório PDF Automatizado** | Gera `outputs/relatorio_analise.pdf` com tabelas e gráficos. |
+| **Criação Automática de Pastas** | Organiza saídas em `outputs/` e `outputs/figs/`. |
 
----
 
-## 🧰 Stack e Dependências
 
-| Categoria | Tecnologia / Biblioteca |
-|------------|------------------------|
-| Manipulação de Dados | [**pandas**](https://pandas.pydata.org/) |
-| Visualização | [**matplotlib**](https://matplotlib.org/), [**seaborn**](https://seaborn.pydata.org/) |
-| Exportação e Relatórios | [**reportlab**](https://www.reportlab.com/dev/docs/reportlab-userguide.pdf) |
-| Utilitários | [**os**, **datetime**, **numpy**] |
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+## Tecnologias Utilizadas
 
----
+| Categoria | Tecnologia |
+|----------|------------|
+| Manipulação de Dados | `pandas`, `numpy` |
+| Visualização | `matplotlib`, `seaborn` |
+| Relatórios PDF | `reportlab` |
+| Utilidades | `os`, `datetime`, `textwrap` |
 
-## 📂 Estrutura de Diretórios
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+
+## Estrutura de Diretórios
 
 ```
 eficiencia_energetica_AT1/
 ├── data/
-│   ├── ENB2012_data.xlsx        # Arquivo original
-│   └── dados.csv                # Arquivo convertido 
+│   ├── ENB2012_data.xlsx         # Arquivo original
+│   └── dados.csv                 # Criado automaticamente
 │
 ├── outputs/
-│   ├── figs/                    # Figuras e gráficos gerados
-│   └── relatorio_analise.pdf    # Relatório final em PDF
+│   ├── figs/                     # Gráficos gerados
+│   └── relatorio_analise.pdf     # Relatório em PDF
 │
 ├── src/
-│   ├── convert_csv.py           # Conversão de XLSX para CSV
-│   ├── analise_exploratoria.py  # Análise e geração de relatório
+│   ├── convert_csv.py            # Conversão XLSX → CSV
+│   ├── analise_exploratoria.py   # Funções de análise + PDF
+│   ├── main.py                   # Execução principal do projeto
 │
-├── requirements.txt             # Dependências do projeto
-└── README.md                    # Documentação do projeto
+├── requirements.txt              # Dependências
+└── README.md                     # Documentação
 ```
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
----
+## Instalação e Execução
 
-## ⚙️ Instalação e Execução
-
-### 🔹 Passo 1 – Criar o ambiente virtual
+### Passo 1 – Criar o ambiente virtual
 ```bash
 $ python -m venv .venv
 $ source .venv/bin/activate   # (Windows: .venv\Scripts\activate)
 ```
 
-### 🔹 Passo 2 – Instalar dependências
+### Passo 2 – Instalar dependências
 ```bash
 $ pip install --upgrade pip
 $ pip install -r requirements.txt
 ```
 
-### 🔹 Passo 3 – Converter o arquivo Excel em CSV
+### Passo 3 – Execute o Projeto
 ```bash
-$ python src/convert_csv.py
+$ python src/main.py
 ```
-> Isso cria automaticamente `data/dados.csv`.
+> Isso cria automaticamente `data/dados.csv` e inicia o projeto.
 
-### 🔹 Passo 4 – Executar a análise exploratória
-```bash
-$ python src/analise_exploratoria.py
-```
-> As saídas serão salvas em `outputs/` e o relatório em PDF estará disponível em:
-> ```
-> outputs/relatorio_analise.pdf
-> ```
 
----
 
-## 📊 Estrutura do Relatório Gerado
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
-O relatório contém:
+## 📊 Estrutura do Relatório PDF
 
-1. **Informações gerais do dataset**  
-2. **Estatísticas descritivas detalhadas**  
-3. **Valores ausentes**  
-4. **Matriz de correlação completa**  
-5. **Top 5 correlações mais fortes**  
-6. **Visualizações (gráficos e heatmaps)**  
 
----
+O relatório final (outputs/relatorio_analise.pdf) contém:
+
+* Informações do dataset (df.info())
+* Estatísticas descritivas em formato vertical
+* Quantidade de valores ausentes
+* Matriz de correlação completa
+* Top 5 correlações mais fortes
+* Histogramas de todas as variáveis
+* Boxplot
+* Scatterplots para aquecimento e resfriamento
+* Heatmap da matriz de correlação
+* Tabela VIF (caso gerada)
+
 

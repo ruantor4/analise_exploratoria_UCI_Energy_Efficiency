@@ -1,8 +1,8 @@
 # Análise Exploratória: Eficiência Energética
 
-Aplicação desenvolvida em **Python** para realizar **análise exploratória de dados (EDA)**  como parte da **Prova de Conceito (PoC)** de um sistema preditivo para **eficiência energética de edifícios**, com base no conjunto de dados público **[UCI Energy Efficiency Dataset](https://archive.ics.uci.edu/ml/datasets/energy+efficiency)**.
+Aplicação desenvolvida em **[Python 3.11](https://docs.python.org/pt-br/3.11/contents.html)** para realizar **[análise exploratória de dados (EDA)](https://pt.wikipedia.org/wiki/An%C3%A1lise_explorat%C3%B3ria_de_dados)**  como parte da **Prova de Conceito (PoC)** de um sistema preditivo para **eficiência energética de edifícios**, com base no conjunto de dados público **[UCI Energy Efficiency Dataset](https://archive.ics.uci.edu/ml/datasets/energy+efficiency)**.
 
-Baseia-se no conjunto de dados público **UCI Energy Efficiency Dataset**, realizando uma análise exploratória completa (EDA) para entender padrões, distribuições e relações entre variáveis, preparando o terreno para modelos de Machine Learning.
+Baseia-se no conjunto de dados público **[UCI Energy Efficiency Dataset](https://archive.ics.uci.edu/ml/datasets/energy+efficiency)**., realizando uma análise exploratória completa (EDA) para entender padrões, distribuições e relações entre variáveis, preparando o terreno para modelos de Machine Learning.
 
 **━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 ## Objetivos do Projeto
@@ -38,10 +38,10 @@ Baseia-se no conjunto de dados público **UCI Energy Efficiency Dataset**, reali
 
 | Categoria | Tecnologia |
 |----------|------------|
-| Manipulação de Dados | `pandas`, `numpy` |
-| Visualização | `matplotlib`, `seaborn` |
-| Relatórios PDF | `reportlab` |
-| Utilidades | `os`, `datetime`, `textwrap` |
+| Manipulação de Dados | **[pandas](https://pandas.pydata.org/docs/)**, **[numpy](https://numpy.org/doc/)** |
+| Visualização | **[matplotlib](https://matplotlib.org/stable/users/explain/quick_start.html)**, **[seaborn](https://seaborn.pydata.org/)** |
+| Relatórios PDF | **[reportlab](https://docs.reportlab.com/releases/notes/whats-new-40/)** |
+| Utilidades | **[os](https://docs.python.org/pt-br/3/library/os.html)**, **[datetime](https://docs.python.org/pt-br/3/library/datetime.html)**, **[textwrap](https://docs.python.org/pt-br/dev/library/textwrap.html)** |
 
 **━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
@@ -96,15 +96,15 @@ $ python src/main.py
 
 O relatório final (outputs/relatorio_analise.pdf) contém:
 
-* Informações do dataset (df.info())
-* Estatísticas descritivas em formato vertical
-* Quantidade de valores ausentes
-* Matriz de correlação completa
-* Top 5 correlações mais fortes
-* Histogramas de todas as variáveis
-* Boxplot
-* Scatterplots para aquecimento e resfriamento
-* Heatmap da matriz de correlação
-* Tabela VIF (caso gerada)
+* **Informações do dataset (df.info())**
+* **Estatísticas descritivas em formato vertical**
+* **Quantidade de valores ausentes**
+* **Matriz de correlação completa**
+* **Top 5 correlações mais fortes**
+* **Histogramas de todas as variáveis**
+* **Boxplot**
+* **Scatterplots para aquecimento e resfriamento**
+* **Heatmap da matriz de correlação**
+* **Tabela VIF (caso gerada)**
 
 

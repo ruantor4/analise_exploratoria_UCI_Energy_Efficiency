@@ -35,6 +35,7 @@ import seaborn as sns
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 import os
 from datetime import datetime
 
@@ -95,6 +96,15 @@ def estatisticas_descritivas(df):
     """
     return df.describe()
 
+def info(df):
+     """
+        Exibe informações gerais sobre o DataFrame,
+        como tipos, contagem de registros e memória usada.
+    """
+     print("\n====== INFORMAÇÕES O DATASET (df.info)")
+     print(df.info())
+     print("\n")
+
 
 def verificar_nulos(df):
     """
@@ -151,7 +161,7 @@ def gerar_matriz_correlacao(df):
     return correlacao
 
 
-def extrair_maiores_correlaçoes(correlacao, limite=5):
+def extrair_maiores_correlacoes(correlacao, limite=5):
     """
         Retorna as 'limite' maiores correlações em valor absoluto entre pares de colunas,
         excluindo a diagonal (correlação de uma coluna com ela mesma).
@@ -165,6 +175,91 @@ def extrair_maiores_correlaçoes(correlacao, limite=5):
     pares_ordenados = sorted(pares, key=lambda x: x[1], reverse=True)
     return pares_ordenados[:limite]
 
+def calcular_vif(df):
+    """
+        Calcula o Fator de Inflação da Variância (VIF)
+        para todas as variáveis preditoras numéricas.
+        
+        Retorna um DataFrame com:
+        - Nome da variável
+        - Valor de VIF
+    """
+    # Selecionar apenas preditoras (remove as duas variáveis alvo)
+    col_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
+    preditoras = [c for c in col_numericas if c not in["Carga_Aquecimento", "Carga_Resfriamento"]]
+
+    print("Calculando VIF para variaveis:")
+    print(preditoras)
+
+     # Criar matriz apenas com preditoras
+    x = df[preditoras]
+
+    # DataFrame para resultado
+    vif_dados = pd.DataFrame()
+    vif_dados["Variavel"] = preditoras
+    vif_dados["VIF"] = [variance_inflation_factor(x.values, i) for i in range(len(preditoras))]
+
+    print("\n ===== tabela VIF =====")
+    print(vif_dados)
+
+    caminho_csv = os.path.join(IMAGES_DIR, "vif_tabela.csv")
+    vif_dados.to_csv(caminho_csv, index=False)
+
+    return vif_dados
+
+def scatterplots_aqueciemneto(df):
+    """
+        Gera scatterplots da variável alvo 'Carga_Aquecimento'
+        contra todas as variáveis preditoras.
+        Salva as imagens na pasta IMAGES_DIR.
+    """
+    target = "Carga_Aquecimento"
+
+    col_numericas = df.select_dtypes(include=[np.number].columns.tolist())
+    preditoras = [col for in col_numericas if col != target and col != "Carga_Resfriamento"]
+
+    print(f"Gerando scatterplots de {target} para as variáveis:")
+    print(preditoras)
+
+    for col in preditoras:
+        plt.figure(figsize=(6,4))
+        sns.scatterplot(x=df[col], y=df[target])
+        plt.title(f"{col} vs {target}")
+        plt.xlabel(col)
+        plt.ylabel(target)
+        
+        caminho = os.path.join(IMAGES_DIR, f"scatter_{target}_{col}.png")
+        
+        plt.tight_layout()
+        plt.savefig(caminho)
+        plt.close()
+
+def scatterplots_refriamento(df):
+    """
+        Gera scatterplots da variável alvo 'Carga_Resfriamento'
+        contra todas as variáveis preditoras.
+        Salva as imagens na pasta IMAGES_DIR.
+    """
+    target = "Carga_Resfriamento"
+
+    col_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
+
+    preditores = [col for col in col_numericas if col not in ["Carga_Aquecimento", "Carga_Resfriamento"]]
+
+    print(f"Gerando scatterplots de {target} para as variáveis:")
+    print(preditores)
+
+    for col in preditores
+        plt.figure(figsize=(6,4))
+        sns.scatterplot(x=df[col], y=df{target})
+        plt.title(f"{col} vs {target}")
+        plt.xlabel(col)
+        plt.ylabel(target)
+
+        caminho = os.path.join(IMAGES_DIR, f"scatter_{target}_{col}.png")
+        plt.tight_layout()
+        plt.savefig(caminho)
+        plt.close()
 
 def gerar_relatorio_pdf(df, descricao, nulos, correlacao, maiores_correlacoes):
     """

@@ -27,7 +27,7 @@ Explicação didática:
 # numpy  -> operações numéricas (opcional aqui, mas comum)
 # matplotlib / seaborn -> criação de gráficos
 # reportlab -> criação de documentos PDF programaticamente
-
+from io import StringIO
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,6 +38,7 @@ from reportlab.lib.utils import ImageReader
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 import os
 from datetime import datetime
+from textwrap import wrap
 
 # Caminhos
 BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -101,7 +102,7 @@ def info(df):
         Exibe informações gerais sobre o DataFrame,
         como tipos, contagem de registros e memória usada.
     """
-     print("\n====== INFORMAÇÕES O DATASET (df.info)")
+     print("\n====== INFORMAÇÕES DO DATASET (df.info)")
      print(df.info())
      print("\n")
 
@@ -175,6 +176,7 @@ def extrair_maiores_correlacoes(correlacao, limite=5):
     pares_ordenados = sorted(pares, key=lambda x: x[1], reverse=True)
     return pares_ordenados[:limite]
 
+
 def calcular_vif(df):
     """
         Calcula o Fator de Inflação da Variância (VIF)
@@ -201,7 +203,8 @@ def calcular_vif(df):
 
     print("\n ===== tabela VIF =====")
     print(vif_dados)
-
+    
+    # Salvar arquivo CSV
     caminho_csv = os.path.join(IMAGES_DIR, "vif_tabela.csv")
     vif_dados.to_csv(caminho_csv, index=False)
 
@@ -215,8 +218,9 @@ def scatterplots_aqueciemneto(df):
     """
     target = "Carga_Aquecimento"
 
-    col_numericas = df.select_dtypes(include=[np.number].columns.tolist())
-    preditoras = [col for in col_numericas if col != target and col != "Carga_Resfriamento"]
+    # Identificar preditoras (todas as colunas numéricas menos as duas saídas)
+    col_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
+    preditoras = [col for col in col_numericas if col not in ["Carga_Aquecimento", "Carga_Resfriamento"]]
 
     print(f"Gerando scatterplots de {target} para as variáveis:")
     print(preditoras)
@@ -242,17 +246,19 @@ def scatterplots_refriamento(df):
     """
     target = "Carga_Resfriamento"
 
+    # Identificar todas as colunas numéricas
     col_numericas = df.select_dtypes(include=[np.number]).columns.tolist()
 
+    # Remover as duas variáveis-alvo para obter apenas preditoras
     preditores = [col for col in col_numericas if col not in ["Carga_Aquecimento", "Carga_Resfriamento"]]
 
     print(f"Gerando scatterplots de {target} para as variáveis:")
     print(preditores)
 
-    for col in preditores
+    for col in preditores:
         plt.figure(figsize=(6,4))
-        sns.scatterplot(x=df[col], y=df{target})
-        plt.title(f"{col} vs {target}")
+        sns.scatterplot(x=df[col], y=df[target])
+        plt.title(f"Scatterplot de {col} vs {target}")
         plt.xlabel(col)
         plt.ylabel(target)
 
@@ -264,144 +270,239 @@ def scatterplots_refriamento(df):
 def gerar_relatorio_pdf(df, descricao, nulos, correlacao, maiores_correlacoes):
     """
     Gera um relatório em PDF com:
-    - Capa com título e data
-    - Sumário executivo com número de registros e colunas
-    - Resumo estatístico (texto)
-    - Tabela de valores nulos
-    - Lista das maiores correlações
-    - Inserção da imagem do heatmap de correlação
-    - Inserção de alguns histogramas (até 4 primeiras imagens encontradas)
+    - Info (df.info)
+    - Sumário executivo
+    - Estatísticas descritivas
+    - Valores nulos
+    - Maiores correlações
+    - Heatmap de correlação
+    - Histogramas
+    - Boxplots
+    - Scatterplots aquecimento e resfriamento
+    - Tabela VIF
     """
     print("Gerando PDF...")
     largura, altura = A4
     c = canvas.Canvas(PDF_PATH, pagesize=A4)
 
-   # Capa
+    # ---------- CAPA ----------
     c.setFont("Helvetica-Bold", 20)
     c.drawCentredString(largura / 2, altura - 80, "Relatório de Análise Exploratória")
     c.setFont("Helvetica", 12)
-    c.drawCentredString(largura / 2, altura - 100, f"Gerado em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    c.drawCentredString(
+        largura / 2,
+        altura - 100,
+        f"Gerado em: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+    )
     c.showPage()
 
-    # Sumário Executivo
+    # ---------- INFO ----------
     c.setFont("Helvetica-Bold", 14)
-    c.drawString(40, altura - 60, "Sumário Executivo")
-    c.setFont("Helvetica", 11)
-    c.drawString(40, altura - 80, f"Total de registros: {df.shape[0]}")
-    c.drawString(40, altura - 98, f"Total de colunas: {df.shape[1]}")
-    c.drawString(40, altura - 116, "Observações: ver se há valores nulos e as maiores correlações abaixo.")
-    c.showPage()
-
-    # Resumo Estatísco
-    c.setFont("Helvetica-Bold", 14)
-    c.drawString(40, altura-60, "Resumo Estatístico (numérico)")
+    c.drawString(40, altura - 60, "Tabela 1: Info do Dataset")
     c.setFont("Courier", 9)
-    texto = descricao.to_string()
-    linhas = texto.split("\n")
+
+    # >>> CORREÇÃO AQUI: usar StringIO em vez de buffer.append <<<
+    buffer_info = StringIO()
+    df.info(buf=buffer_info)
+    linhas = buffer_info.getvalue().split("\n")
+
     y = altura - 90
     for linha in linhas:
         c.drawString(40, y, linha)
         y -= 10
         if y < 60:
             c.showPage()
+            c.setFont("Courier", 9)
             y = altura - 60
 
-    # Valores Nulos
+    c.showPage()
+
+    # ---------- SUMÁRIO EXECUTIVO ----------
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(40, altura - 60, "Sumário Executivo")
+    c.setFont("Helvetica", 11)
+    c.drawString(40, altura - 90, f"Total de registros: {df.shape[0]}")
+    c.drawString(40, altura - 108, f"Total de colunas: {df.shape[1]}")
+    c.drawString(
+        40,
+        altura - 126,
+        "As próximas seções detalham os achados da análise exploratória."
+    )
+    c.showPage()
+
+   # ---------- DESCRIBE ----------
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(40, altura - 60, "Tabela 2: Estatísticas Descritivas")
+    c.setFont("Courier", 8)
+
+    # Transformar estatísticas para formato vertical (tipo tabela)
+    descricao_vertical = descricao.T  # transpor a tabela
+    linhas = descricao_vertical.to_string().split("\n")
+
+    y = altura - 90
+
+    for linha in linhas:
+        c.drawString(40, y, linha)
+        y -= 10
+
+        # quebra de página automática
+        if y < 60:
+            c.showPage()
+            c.setFont("Courier", 8)
+            y = altura - 60
+
+    # ---------- VALORES NULOS ----------
     c.showPage()
     c.setFont("Helvetica-Bold", 14)
-    c.drawString(40, altura - 60, "Contagem de Valores Nulos por Coluna")
+    c.drawString(40, altura - 60, "Valores Nulos")
     c.setFont("Helvetica", 11)
-    
+
     y = altura - 90
-    
     for col, val in nulos.items():
-        c.drawString(40, y, f"- {col}: {int(val)}")
+        c.drawString(40, y, f"- {col}: {val}")
         y -= 14
         if y < 60:
             c.showPage()
+            c.setFont("Helvetica", 11)
             y = altura - 60
 
-    # Maiores correlações
+    # ---------- MAIORES CORRELAÇÕES ----------
     c.showPage()
     c.setFont("Helvetica-Bold", 14)
-    c.drawString(40, altura - 60, "Maiores Correlações (valor absoluto)")
+    c.drawString(40, altura - 60, "Maiores Correlações")
     c.setFont("Helvetica", 11)
-
     y = altura - 90
 
-    if len(maiores_correlacoes) == 0:
-        c.drawString(40, y, "Nenhuma correlação alta encontrada.")
-    else:
-        for (a,b), val in maiores_correlacoes:
-            c.drawString(40, y, f"- {a} ↔ {b} : {val:.2f}")
-            y -= 14
-            if y < 60:
-                c.showPage()
-                y = altura - 60
+    for (a, b), val in maiores_correlacoes:
+        c.drawString(40, y, f"- {a} ↔ {b}: {val:.4f}")
+        y -= 14
+        if y < 60:
+            c.showPage()
+            c.setFont("Helvetica", 11)
+            y = altura - 60
 
-
-    # Inserir headMap de correlação
+    # ---------- HEATMAP ----------
     caminho_heat = os.path.join(IMAGES_DIR, "heatmap_correlacao.png")
-    
     if os.path.exists(caminho_heat):
-        
         c.showPage()
         c.setFont("Helvetica-Bold", 14)
-        c.drawString(40, altura - 60 , "Heatmap de Correlação")
-        
-        img = ImageReader(caminho_heat)
+        c.drawString(40, altura - 60, "Figura 3: Matriz de Correlação")
 
+        img = ImageReader(caminho_heat)
         iw, ih = img.getSize()
-        aspect = ih / iw
         img_w = largura - 80
-        img_h = img_w * aspect
+        img_h = img_w * (ih / iw)
+
         c.drawImage(img, 40, altura - 100 - img_h, width=img_w, height=img_h)
 
-    # Inserir até 4 histogramas como exemplo
-    imagens = [f for f in os.listdir(IMAGES_DIR) if f.startswith("hist_")][:4]
-    
-    for img_name in imagens:
-        caminho_img = os.path.join(IMAGES_DIR, img_name)
-            
+    # ---------- HISTOGRAMAS ----------
+    if os.path.exists(IMAGES_DIR):
+        imagens_hist = [
+            f for f in os.listdir(IMAGES_DIR)
+            if f.startswith("hist_")
+        ]
+    else:
+        imagens_hist = []
+
+    for fname in imagens_hist:
+        caminho_img = os.path.join(IMAGES_DIR, fname)
         if os.path.exists(caminho_img):
             c.showPage()
             c.setFont("Helvetica-Bold", 12)
-            c.drawString(40, altura - 60, f"Visualização: {img_name}")
+            c.drawString(40, altura - 60, f"Figura: {fname}")
             img = ImageReader(caminho_img)
+
             iw, ih = img.getSize()
-            aspect = ih/iw
             img_w = largura - 80
-            img_h = img_w * aspect
+            img_h = img_w * (ih / iw)
             c.drawImage(img, 40, altura - 100 - img_h, width=img_w, height=img_h)
+
+    # ---------- BOXPLOTS ----------
+    if os.path.exists(IMAGES_DIR):
+        imagens_box = [
+            f for f in os.listdir(IMAGES_DIR)
+            if f.startswith("box_")
+        ]
+    else:
+        imagens_box = []
+
+    for fname in imagens_box:
+        caminho_img = os.path.join(IMAGES_DIR, fname)
+        if os.path.exists(caminho_img):
+            c.showPage()
+            c.setFont("Helvetica-Bold", 12)
+            c.drawString(40, altura - 60, f"Figura: {fname}")
+            img = ImageReader(caminho_img)
+
+            iw, ih = img.getSize()
+            img_w = largura - 80
+            img_h = img_w * (ih / iw)
+            c.drawImage(img, 40, altura - 100 - img_h, width=img_w, height=img_h)
+
+    # ---------- SCATTERPLOTS AQUECIMENTO ----------
+    if os.path.exists(IMAGES_DIR):
+        imagens_scatter_aq = [
+            f for f in os.listdir(IMAGES_DIR)
+            if f.startswith("scatter_Carga_Aquecimento")
+        ]
+    else:
+        imagens_scatter_aq = []
+
+    for fname in imagens_scatter_aq:
+        caminho_img = os.path.join(IMAGES_DIR, fname)
+        if os.path.exists(caminho_img):
+            c.showPage()
+            c.setFont("Helvetica-Bold", 12)
+            c.drawString(40, altura - 60, f"Figura: {fname}")
+            img = ImageReader(caminho_img)
+
+            iw, ih = img.getSize()
+            img_w = largura - 80
+            img_h = img_w * (ih / iw)
+            c.drawImage(img, 40, altura - 100 - img_h, width=img_w, height=img_h)
+
+    # ---------- SCATTERPLOTS RESFRIAMENTO ----------
+    if os.path.exists(IMAGES_DIR):
+        imagens_scatter_res = [
+            f for f in os.listdir(IMAGES_DIR)
+            if f.startswith("scatter_Carga_Resfriamento")
+        ]
+    else:
+        imagens_scatter_res = []
+
+    for fname in imagens_scatter_res:
+        caminho_img = os.path.join(IMAGES_DIR, fname)
+        if os.path.exists(caminho_img):
+            c.showPage()
+            c.setFont("Helvetica-Bold", 12)
+            c.drawString(40, altura - 60, f"Figura: {fname}")
+            img = ImageReader(caminho_img)
+
+            iw, ih = img.getSize()
+            img_w = largura - 80
+            img_h = img_w * (ih / iw)
+            c.drawImage(img, 40, altura - 100 - img_h, width=img_w, height=img_h)
+
+    # ---------- VIF ----------
+    caminho_vif = os.path.join(IMAGES_DIR, "vif_tabela.csv")
+
+    if os.path.exists(caminho_vif):
+        vif_df = pd.read_csv(caminho_vif)
+
+        c.showPage()
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(40, altura - 60, "Tabela 3: Fator de Inflação da Variância (VIF)")
+        c.setFont("Courier", 9)
+
+        y = altura - 90
+        linhas = vif_df.to_string(index=False).split("\n")
+        for linha in linhas:
+            c.drawString(40, y, linha)
+            y -= 12
+            if y < 60:
+                c.showPage()
+                c.setFont("Courier", 9)
+                y = altura - 60
 
     c.save()
     print(f"PDF salvo em: {PDF_PATH}")
-
-    # ---- FLUXO DE EXECUÇÃO ----
-def main():
-    # Ler dados
-    df = ler_arquivo_csv(DATA_PATH)
-
-    # Renomear colunas para portuguès
-    df = renomear_colunas_pt_br(df)
-
-    # Estatisticas descritivas
-    descricao = estatisticas_descritivas(df)
-
-    # Verificar nulos
-    nulos = verificar_nulos(df)
-
-    # Gerar gráficos
-    gerar_histogramas(df)
-    
-    correl = gerar_matriz_correlacao(df)
-
-    # Extrair maiores correlações
-    maiores = extrair_maiores_correlaçoes(correl, limite=6)
-
-    # Gerar PDF
-    gerar_relatorio_pdf(df, descricao, nulos, correl, maiores)
-
-
-if __name__ == "__main__":
-    main()

@@ -4,7 +4,7 @@ Aplicação desenvolvida em **[Python 3.11](https://docs.python.org/pt-br/3.11/c
 
 Baseia-se no conjunto de dados público **[UCI Energy Efficiency Dataset](https://archive.ics.uci.edu/ml/datasets/energy+efficiency)**., realizando uma análise exploratória completa (EDA) para entender padrões, distribuições e relações entre variáveis, preparando o terreno para modelos de Machine Learning.
 
-**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 ## Objetivos do Projeto
 
 - Converter o arquivo original em Excel (`ENB2012_data.xlsx`) para CSV (`dados.csv`).
@@ -14,7 +14,7 @@ Baseia-se no conjunto de dados público **[UCI Energy Efficiency Dataset](https:
 - Gerar visualizações como histogramas, boxplots, scatterplots e heatmaps.
 - Compilar automaticamente um **relatório completo em PDF** com todos os resultados.
 
-**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
 
 ## Funcionalidades
@@ -33,7 +33,7 @@ Baseia-se no conjunto de dados público **[UCI Energy Efficiency Dataset](https:
 
 
 
-**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 ## Tecnologias Utilizadas
 
 | Categoria | Tecnologia |
@@ -43,7 +43,7 @@ Baseia-se no conjunto de dados público **[UCI Energy Efficiency Dataset](https:
 | Relatórios PDF | **[reportlab](https://docs.reportlab.com/releases/notes/whats-new-40/)** |
 | Utilidades | **[os](https://docs.python.org/pt-br/3/library/os.html)**, **[datetime](https://docs.python.org/pt-br/3/library/datetime.html)**, **[textwrap](https://docs.python.org/pt-br/dev/library/textwrap.html)** |
 
-**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
 ## Estrutura de Diretórios
 
@@ -55,17 +55,18 @@ eficiencia_energetica_AT1/
 │
 ├── outputs/
 │   ├── figs/                     # Gráficos gerados
-│   └── relatorio_analise.pdf     # Relatório em PDF
-│
+│   |── relatorio_analise.pdf     # Relatório em PDF
+│   ├── logs.txt                  # Logs
+|
 ├── src/
 │   ├── convert_csv.py            # Conversão XLSX → CSV
 │   ├── analise_exploratoria.py   # Funções de análise + PDF
 │   ├── main.py                   # Execução principal do projeto
-│
+│   
 ├── requirements.txt              # Dependências
 └── README.md                     # Documentação
 ```
-**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
 ## Instalação e Execução
 
@@ -89,7 +90,7 @@ $ python src/main.py
 
 
 
-**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
+**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**
 
 ## 📊 Estrutura do Relatório PDF
 

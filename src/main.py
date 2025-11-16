@@ -1,54 +1,55 @@
+import logging
+import os
 from convert_csv import converter_excel_para_csv
-from analise_exploratoria import (
-    ler_arquivo_csv,
-    renomear_colunas_pt_br,
-    estatisticas_descritivas,
-    info,
-    verificar_nulos,
-    gerar_histogramas,
-    gerar_matriz_correlacao,
-    extrair_maiores_correlacoes,
-    scatterplots_aqueciemneto,
-    scatterplots_refriamento,
-    calcular_vif,
-    gerar_relatorio_pdf,
-    DATA_PATH
-)
+from analise_exploratoria import executar_analise_exploratoria
+
+
+def log_system(log_path: str):
+    """
+    Configura o sistema de logs da aplicação.
+    """
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers={
+            logging.FileHandler(log_path, mode='a', encoding='utf-8'),
+            logging.StreamHandler()
+        }
+    )
+    logging.info("======== INÍCIO DA EXECUÇÃO ========")
+    
+
 
 def main():
-    #converte arquivo para csv
-    converter_excel_para_csv()
-    # Ler dados
-    df = ler_arquivo_csv(DATA_PATH)
 
-    # Renomear colunas
-    df = renomear_colunas_pt_br(df)
+    BASE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-    # Info
-    info(df)
+    PATHS = {
+        # Caminhos
+        "BASE_PATH": BASE_PATH,
+        "DATA_XLSX": os.path.join(BASE_PATH, "data", "ENB2012_data.xlsx"),
+        "DATA_PATH": os.path.join(BASE_PATH, "data","dados.csv"),
+        "OUTPUTS_DIR": os.path.join(BASE_PATH, "outputs"),
+        "IMAGES_DIR": os.path.join(BASE_PATH,"outputs", "figs"),
+        "lOG_PATH": os.path.join(BASE_PATH, "outputs", "logs"),
+        "PDF_PATH": os.path.join(BASE_PATH,"outputs", "relatorio_analise.pdf"),   
+    }
+    
+    # Criar pastas de saída caso não existam
+    os.makedirs(PATHS["OUTPUTS_DIR"], exist_ok=True)
+    os.makedirs(PATHS["IMAGES_DIR"], exist_ok=True)
+    
+    # Configurar Logs
+    log_system(PATHS["lOG_PATH"])
 
-    # Estatísticas descritivas
-    descricao = estatisticas_descritivas(df)
 
-    # Nulos
-    nulos = verificar_nulos(df)
+    try:
+       logging.info("Convertendo Excel para CSV....")
+       converter_excel_para_csv(PATHS["DATA_XLSX"], PATHS["DATA_PATH"])
+       executar_analise_exploratoria(PATHS)
 
-    # Gráficos principais
-    gerar_histogramas(df)
-    correl = gerar_matriz_correlacao(df)
-
-    # Scatterplots
-    scatterplots_aqueciemneto(df)
-    scatterplots_refriamento(df)
-
-    # Correlações fortes
-    maiores = extrair_maiores_correlacoes(correl, limite=6)
-
-    # VIF
-    calcular_vif(df)
-
-    # PDF final
-    gerar_relatorio_pdf(df, descricao, nulos, correl, maiores)
+    except Exception as e:
+        logging.error("ERRO CRÍTICO DURANTE A EXECUÇÃO")
 
 if __name__ == "__main__":
     main()

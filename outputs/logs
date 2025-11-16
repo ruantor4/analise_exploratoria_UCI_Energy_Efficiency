@@ -1,0 +1,74 @@
+2025-11-16 11:19:01,368 - INFO - ======== INÍCIO DA EXECUÇÃO ========
+2025-11-16 11:19:01,369 - INFO - Convertendo Excel para CSV....
+2025-11-16 11:19:01,369 - ERROR - ERRO CRÍTICO DURANTE A EXECUÇÃO
+2025-11-16 11:28:50,746 - INFO - ======== INÍCIO DA EXECUÇÃO ========
+2025-11-16 11:28:50,746 - INFO - Convertendo Excel para CSV....
+2025-11-16 11:28:50,746 - INFO - Lendo arquivo Excel: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\ENB2012_data.xlsx
+2025-11-16 11:28:51,233 - INFO - Salvando CSV em: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\dados.csv
+2025-11-16 11:28:51,242 - INFO - Conversão para CSV concluída com sucesso.
+2025-11-16 11:28:51,242 - ERROR - ERRO CRÍTICO DURANTE A EXECUÇÃO
+2025-11-16 11:32:40,761 - INFO - ======== INÍCIO DA EXECUÇÃO ========
+2025-11-16 11:32:40,762 - INFO - Convertendo Excel para CSV....
+2025-11-16 11:32:40,762 - INFO - Lendo arquivo Excel: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\ENB2012_data.xlsx
+2025-11-16 11:32:41,124 - INFO - Salvando CSV em: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\dados.csv
+2025-11-16 11:32:41,132 - INFO - Conversão para CSV concluída com sucesso.
+2025-11-16 11:32:41,132 - ERROR - ERRO CRÍTICO DURANTE A EXECUÇÃO
+2025-11-16 11:33:47,098 - INFO - ======== INÍCIO DA EXECUÇÃO ========
+2025-11-16 11:33:47,099 - INFO - Convertendo Excel para CSV....
+2025-11-16 11:33:47,099 - INFO - Lendo arquivo Excel: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\ENB2012_data.xlsx
+2025-11-16 11:33:47,699 - INFO - Salvando CSV em: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\dados.csv
+2025-11-16 11:33:47,708 - INFO - Conversão para CSV concluída com sucesso.
+2025-11-16 11:33:47,708 - INFO - Executando pipeline da Análise Exploratória...
+2025-11-16 11:33:47,709 - INFO - Lendo dados de: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\dados.csv
+2025-11-16 11:33:47,734 - INFO - Dados carregados: 768 linhas x 10 colunas
+2025-11-16 11:33:47,735 - INFO - Renomeando colunas para o padrão em português...
+2025-11-16 11:33:47,742 - INFO - Colunas renomeadas com sucesso.
+2025-11-16 11:33:47,743 - INFO - Gerando informações do DataFrame (df.info)...
+2025-11-16 11:33:47,770 - INFO - Calculando as estatísticas decritivas...
+2025-11-16 11:33:47,771 - ERROR - Erro ao gerar estatísticas desritivas
+Traceback (most recent call last):
+  File "c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\src\analise_exploratoria.py", line 112, in estatisticas_descritivas
+    descricao = df.describre()
+                ^^^^^^^^^^^^
+  File "C:\Users\ruant\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\generic.py", line 6321, in __getattr__
+    return object.__getattribute__(self, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'DataFrame' object has no attribute 'describre'
+2025-11-16 11:33:47,851 - ERROR - ERRO CRÍTICO DURANTE A EXECUÇÃO
+2025-11-16 11:35:22,096 - INFO - ======== INÍCIO DA EXECUÇÃO ========
+2025-11-16 11:35:22,096 - INFO - Convertendo Excel para CSV....
+2025-11-16 11:35:22,096 - INFO - Lendo arquivo Excel: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\ENB2012_data.xlsx
+2025-11-16 11:35:22,590 - INFO - Salvando CSV em: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\dados.csv
+2025-11-16 11:35:22,598 - INFO - Conversão para CSV concluída com sucesso.
+2025-11-16 11:35:22,598 - INFO - Executando pipeline da Análise Exploratória...
+2025-11-16 11:35:22,599 - INFO - Lendo dados de: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\data\dados.csv
+2025-11-16 11:35:22,612 - INFO - Dados carregados: 768 linhas x 10 colunas
+2025-11-16 11:35:22,613 - INFO - Renomeando colunas para o padrão em português...
+2025-11-16 11:35:22,614 - INFO - Colunas renomeadas com sucesso.
+2025-11-16 11:35:22,614 - INFO - Gerando informações do DataFrame (df.info)...
+2025-11-16 11:35:22,620 - INFO - Calculando as estatísticas decritivas...
+2025-11-16 11:35:22,640 - INFO - Estatísticas descritivas calculadas com sucesso.
+2025-11-16 11:35:22,641 - INFO - Verificando valores nulos nas colunas...
+2025-11-16 11:35:22,641 - INFO - Verificação de valores nulos concluída.
+2025-11-16 11:35:22,641 - INFO - Gerando histogramas e boxplots para variáveis numéricas...
+2025-11-16 11:35:24,612 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:25,066 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:25,542 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:26,020 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:26,482 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:26,917 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:27,391 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:27,910 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:28,360 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:28,817 - INFO - Histogramas e boxplots gerados com sucesso.
+2025-11-16 11:35:28,817 - INFO - Calculando matriz de correlação (Pearson)...
+2025-11-16 11:35:29,287 - INFO - Gerando scatterplots para: Carga_Aquecimento
+2025-11-16 11:35:31,002 - INFO - Scatterplots de aquecimento gerados com sucesso.
+2025-11-16 11:35:31,002 - INFO - Gerando scatterplots para: Carga_Resfriamento
+2025-11-16 11:35:32,856 - INFO - Scatterplots de resfriamento gerados com sucesso.
+2025-11-16 11:35:32,856 - INFO - Extraindo as 6 maiores correlações...
+2025-11-16 11:35:32,857 - INFO - Calculando VIF (Variance Inflation Factor)...
+2025-11-16 11:35:32,892 - INFO - Tabela VIF salva em: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\outputs\figs\vif_tabela.csv
+2025-11-16 11:35:32,893 - INFO - Gerando relatório PDF completo da EDA...
+2025-11-16 11:35:33,881 - INFO - Relatório PDF salvo em: c:\Users\ruant\Desktop\MACHINE LEARN\eficiencia_energetica 15-11\analise_exploratoria_de_dadosat1\outputs\relatorio_analise.pdf
+2025-11-16 11:35:33,882 - INFO - Pipeline da AT1 concluído com sucesso.

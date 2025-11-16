@@ -1,23 +1,29 @@
+import logging
 import os
 import pandas as pd
 
-PATH_BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-PATH_XLSX = os.path.join(PATH_BASE, "data", "ENB2012_data.xlsx")
-PATH_CSV = os.path.join(PATH_BASE, "data", "dados.csv")
-
-def converter_excel_para_csv():
+def converter_excel_para_csv(xlsx_path, csv_path: str) -> None:
     """
-        Converte o arquivo ENB2012_data.xlsx para dados.csv.
-        Executado apenas se o CSV não existir.
+    Converte o arquivo XLSX para CSV.
+    Se o CSV já existir, ele será substituído automaticamente.
     """
-    if os.path.exists(PATH_CSV):
-        print("CSV já existe. Pulando conversão...")
-        return
+    try:
+        logging.info(f"Lendo arquivo Excel: {xlsx_path}")
+        df = pd.read_excel(xlsx_path)
 
-    print(f"Lendo arquivo Excel: {PATH_XLSX}")
-    df = pd.read_excel(PATH_XLSX)
+        # Cria pastas se faltar
+        os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 
-    print(f"Salvando CSV em: {PATH_CSV}")
-    df.to_csv(PATH_CSV, index=False, encoding="utf-8")
+        logging.info(f"Salvando CSV em: {csv_path}")
+        df.to_csv(csv_path, index=False)
 
-    print("Conversão concluída com sucesso!")
+        logging.info("Conversão para CSV concluída com sucesso.")
+
+    except FileNotFoundError:
+        logging.error("Arquivo XLSX não encontrado.", exc_info=True)
+        raise
+
+    except Exception:
+        logging.error("Erro ao converter Excel para CSV.", exc_info=True)
+        raise
+    

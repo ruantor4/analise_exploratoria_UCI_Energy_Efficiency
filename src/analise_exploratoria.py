@@ -55,7 +55,7 @@ def ler_arquivo_csv(caminho :str) -> pd.DataFrame:
         logging.error("Arquivo não encontrado. Coloque o arquivo 'dados.csv' na pasta data/")
         raise
     except Exception as e:
-        logging.error("Erro ao ler o CSV: ", e)
+        logging.error("Erro ao ler o CSV: %s", e, exc_info=True)
         raise
     
     logging.info(f"Dados carregados: {df.shape[0]} linhas x {df.shape[1]} colunas")
@@ -224,7 +224,7 @@ def gerar_histogramas(df: pd.DataFrame, images_dir: str) -> None:
             logging.error(f"Erro ao gerar gráficos para a coluna: {coluna}", exc_info=True)
             raise
 
-        logging.info("Histogramas e boxplots gerados com sucesso.")
+    logging.info("Histogramas e boxplots gerados com sucesso.")
 
 
 def gerar_matriz_correlacao(df: pd.DataFrame, images_dir: str) -> pd.DataFrame:
@@ -247,17 +247,18 @@ def gerar_matriz_correlacao(df: pd.DataFrame, images_dir: str) -> pd.DataFrame:
     except Exception:
         logging.error("Erro ao calcular matriz de correlação.", exc_info=True)
         raise
+
+    caminho = os.path.join(images_dir, "heatmap_correlacao.png")
     
     try:
         plt.figure(figsize=(10,8))
         sns.heatmap(correlacao, annot=True, fmt=".2f", cmap="coolwarm")
         plt.title("Matriz de correlação (Pearson)")
-    
-        caminho = os.path.join(images_dir, "heatmap_correlacao.png")
-
         plt.tight_layout()
         plt.savefig(caminho)
         plt.close()
+
+        logging.info(f"Heatmap de correlação salvo em: {caminho}")
 
     except Exception:
         logging.error(f"Heatmap de correlação salvo em: {caminho}")
@@ -615,11 +616,11 @@ def gerar_relatorio_pdf(
 
 
     # ---------- HISTOGRAMAS ----------
-    hist_images = {
+    hist_images = sorted(
         f for f in os.listdir(images_dir)
         if f.startswith("hist_")
         
-    }
+    )
 
     for fname in hist_images:
         caminho_img = os.path.join(images_dir, fname)
@@ -639,10 +640,10 @@ def gerar_relatorio_pdf(
 
 
     # ---------- BOXPLOTS ----------
-    imagens_box = [
+    imagens_box = sorted(
         f for f in os.listdir(images_dir)
         if f.startswith("box_")
-    ]
+    )
 
     for fname in imagens_box:
         caminho_img = os.path.join(images_dir, fname)
@@ -661,10 +662,10 @@ def gerar_relatorio_pdf(
 
 
     # ---------- SCATTERPLOTS AQUECIMENTO ----------
-    imagens_scatter_aq = [
+    imagens_scatter_aq = sorted(
         f for f in os.listdir(images_dir)
         if f.startswith("scatter_Carga_Aquecimento")
-    ]
+    )
     
     for fname in imagens_scatter_aq:
         caminho_img = os.path.join(images_dir, fname)
@@ -682,10 +683,10 @@ def gerar_relatorio_pdf(
         c.drawImage(img, 40, altura - 100 - img_h, width=img_w, height=img_h)
 
     # ---------- SCATTERPLOTS RESFRIAMENTO ----------
-    imagens_scatter_res = [
+    imagens_scatter_res = sorted(
         f for f in os.listdir(images_dir)
         if f.startswith("scatter_Carga_Resfriamento")
-    ]
+    )
     
     for fname in imagens_scatter_res:
         caminho_img = os.path.join(images_dir, fname)
